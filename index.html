@@ -692,16 +692,23 @@
 
             reset() {
                 this.x = Math.random() < 0.5 ? -50 : width + 50;
-                this.y = Math.random() * (height * 0.8) + 50;
-                this.speed = (Math.random() * 1.5 + 0.8) * (this.x < 0 ? 1 : -1);
-                this.size = Math.random() * 12 + 12;
-                this.color = ['#ff9a9e', '#fecfef', '#a1c4fd', '#c2e9fb', '#ffe066'][Math.floor(Math.random() * 5)];
-                this.tailAngle = 0;
+                this.y = Math.random() * (height * 0.85) + 40;
+                this.speed = (Math.random() * 1.8 + 0.6) * (this.x < 0 ? 1 : -1);
+                this.size = Math.random() * 14 + 10;
+                this.color = [
+                    '#ff9a9e', '#fecfef', '#a1c4fd', '#c2e9fb', 
+                    '#ffe066', '#ffb347', '#b19ffb', '#7ef195', '#ff758c'
+                ][Math.floor(Math.random() * 9)];
+                this.tailAngle = Math.random() * Math.PI * 2;
+                this.tailSpeed = Math.random() * 0.1 + 0.1;
+                this.yOffset = Math.random() * 100;
             }
 
             update() {
                 this.x += this.speed;
-                this.tailAngle += 0.15;
+                this.tailAngle += this.tailSpeed;
+                // 위아래로 살랑살랑 헤엄치는 효과 추가
+                this.y += Math.sin(this.x * 0.02 + this.yOffset) * 0.3;
 
                 if ((this.speed > 0 && this.x > width + 60) || (this.speed < 0 && this.x < -60)) {
                     this.reset();
@@ -722,7 +729,7 @@
                 ctx.fill();
 
                 // 꼬리 지느러미
-                const tailWiggle = Math.sin(this.tailAngle) * 5;
+                const tailWiggle = Math.sin(this.tailAngle) * 6;
                 ctx.beginPath();
                 ctx.moveTo(-this.size + 2, 0);
                 ctx.lineTo(-this.size - 12, -8 + tailWiggle);
@@ -746,9 +753,9 @@
             }
         }
 
-        // 배열 생성
+        // 배열 생성 (물고기 개수를 7마리에서 20마리로 대폭 증가)
         const bubbles = Array.from({ length: 45 }, () => new Bubble());
-        const fishes = Array.from({ length: 7 }, () => new Fish());
+        const fishes = Array.from({ length: 20 }, () => new Fish());
 
         // 메인 애니메이션 루프
         function animateCanvas() {
